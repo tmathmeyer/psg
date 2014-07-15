@@ -29,3 +29,9 @@ the numbers are the forground and background respectivey. they are
 
 also add the file https://github.com/tmathmeyer/dotfiles/blob/master/.config/psg/git.sh
 to the ~/.config/psg/ directory. 
+
+
+##SCREENSHOTS
+![everything](screenshots/tree.png)
+
+![git](screenshots/git_info.png)

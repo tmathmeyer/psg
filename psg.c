@@ -43,14 +43,17 @@ void echo_ps1 (ps1 * ll) {
 }
 
 char * git_module() {
-	FILE * git_info = popen("/bin/bash /home/ted/.config/psg/git.sh", "r");
+	char * path = malloc(256);
+	memset(path, 0, 256);
+	snprintf(path, 256, "/bin/bash %s/.config/psg/git.sh 2>/dev/null", getenv("HOME"));
+	FILE * git_info = popen(path, "r");
 	if (git_info == NULL) {
 		return NULL;
 	}
 
 	char * branch = malloc(64);
 	int pos = 0; char c = 0;
-	while((c = fgetc(git_info)) != '\n' && pos < 64) {
+	while((c = fgetc(git_info)) != '\n' && c != EOF && pos < 64) {
 		if (c != '\\') {
 			branch[pos++] = c;
 		} else {
@@ -61,8 +64,32 @@ char * git_module() {
 		}
 	}
 	fclose(git_info);
+	return pos<14?NULL:branch;
+}
 
-	return branch;
+char * svn_module() {
+	char * path = malloc(256);
+	memset(path, 0, 256);
+	snprintf(path, 256, "/bin/bash %s/.config/psg/svntr.sh 2>/dev/null", getenv("HOME"));
+	FILE * svn_info = popen(path, "r");
+	if (svn_info == NULL) {
+		return NULL;
+	}
+
+	char * branch = malloc(64);
+	int pos = 0; char c = 0;
+	while((c = fgetc(svn_info)) != '\n' && c != EOF && pos < 64) {
+		if (c != '\\') {
+			branch[pos++] = c;
+		} else {
+			char n = fgetc(svn_info);
+			if (n == 'e') {
+				branch[pos++] = '\e';
+			}
+		}
+	}
+	fclose(svn_info);
+	return pos<2?NULL:branch;
 }
 
 char * cwd_module() {
@@ -128,10 +155,22 @@ ps1 * gen_from_config() {
 			z -> text = cwd_module();
 		}
 
+		if (strncmp (strrd, "$svn", 5) == 0) {
+			z -> text = svn_module();
+		}
+
+
+
+
+
+		if (z -> text == NULL) {
+			free(z);
+			continue;
+		}
+
 		z -> next = result;
 		z -> colors.fg = fg;
 		z -> colors.bg = bg;
-
 		result = z;
 	}
 	free(strrd);

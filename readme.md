@@ -35,3 +35,5 @@ to the ~/.config/psg/ directory.
 ![everything](screenshots/tree.png)
 
 ![git](screenshots/git_info.png)
+
+![shell](screenshots/terminal.png)

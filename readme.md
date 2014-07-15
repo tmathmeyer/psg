@@ -23,7 +23,7 @@ $git
 8
 ````
 
-the $<var> are module names, they correlate directly to C functions
+the $variables are module names, they correlate directly to C functions
 the numbers are the forground and background respectivey. they are
 8 bit colors. look here for more info: http://misc.flogisoft.com/bash/tip_colors_and_formatting
 

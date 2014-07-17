@@ -1,9 +1,8 @@
 #PSG:
 ## Prompt Source Generator (Beta, wont work unless your username is ted)
 
-#####because fuck bashrc, its slow and has shit manipulation of data.
-#####because fuck zsh, it is bloat.
-#####It's really late now an I have work in the morning.
+#####because bash has trash control over stuctured data
+#####because zsh is hipster and bloat
 
 
 ## Using PSG

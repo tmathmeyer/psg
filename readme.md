@@ -1,5 +1,5 @@
 #PSG:
-## Prompt Source Generator (Beta, wont work unless your username is ted)
+## Prompt Source Generator
 
 #####because bash has trash control over stuctured data
 #####because zsh is hipster and bloat
@@ -27,7 +27,7 @@ the numbers are the forground and background respectivey. they are
 8 bit colors. look here for more info: http://misc.flogisoft.com/bash/tip_colors_and_formatting
 
 also add the file https://github.com/tmathmeyer/dotfiles/blob/master/.config/psg/git.sh
-to the ~/.config/psg/ directory. 
+to the ~/.config/psg/ directory.
 
 
 ##SCREENSHOTS

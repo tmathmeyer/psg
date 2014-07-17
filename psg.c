@@ -132,7 +132,10 @@ ps1 * reverse_list (ps1 * n) {
 }
 
 ps1 * gen_from_config() {
-	FILE * fp = fopen("/home/ted/.config/psg/psgrc", "r");
+	char * path = malloc(64);
+	memset(path, 0, 64);
+	snprintf(path, 64, "%s/.config/psg/psgrc", getenv("HOME"));
+	FILE * fp = fopen(path, "r");
 	if (fp == NULL) {
 		return NULL;
 	}
@@ -159,10 +162,6 @@ ps1 * gen_from_config() {
 			z -> text = svn_module();
 		}
 
-
-
-
-
 		if (z -> text == NULL) {
 			free(z);
 			continue;
@@ -176,7 +175,6 @@ ps1 * gen_from_config() {
 	free(strrd);
 
 	return reverse_list(result);
-	
 }
 
 

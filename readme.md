@@ -6,13 +6,13 @@
 
 
 ## Using PSG
-group tag | definition
------------------------------------------------------------
-$proc            | # of background processes (doesnt show anything if there arent any)
-$userhost        | username & hostname (on my computer it's 'ted@hyperion', or 'ted@helios')
-$path            | the current pwd of the shell ie, '~/git/psg' (it replaces $HOME with ~)
-$git             | information about the current git repository, if the pwd is in one.
-$svn (not shown) | similar to git, but only works with the custom tripadvisor SVN
+| group tag | definition|
+|-----------|------------------------------------------------|
+| $proc            | # of background processes (doesnt show anything if there arent any) |
+| $userhost        | username & hostname (on my computer it's 'ted@hyperion', or 'ted@helios') |
+| $path            | the current pwd of the shell ie, '~/git/psg' (it replaces $HOME with ~) |
+| $git             | information about the current git repository, if the pwd is in one. |
+| $svn (not shown) | similar to git, but only works with the custom tripadvisor SVN |
 
 
 make a file ~/.config/psg/psgrc

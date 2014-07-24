@@ -131,6 +131,40 @@ ps1 * reverse_list (ps1 * n) {
 	return res;
 }
 
+char * proc_module () {
+	pid_t ppid = getppid();
+	char * cmd = malloc(40);
+	//snprintf(cmd, 40, "ps h --ppid %i -o pid | wc -l", ppid);
+	snprintf(cmd, 40, "cat /proc/%i/status | grep PPid", ppid);
+	FILE * fp = popen(cmd, "r");
+	if (fp == NULL) {
+		return NULL;
+	}
+	int realppid;
+	fscanf(fp, "PPid: %i", &realppid);
+
+
+	memset(cmd, 0, 40);
+	snprintf(cmd, 40, "ps h --ppid %i -o pid | wc -l", realppid);
+	fclose(fp);
+	fp = popen(cmd, "r");
+	if (fp == NULL) {
+		return NULL;
+	}
+	int i;
+	fscanf(fp, "%i", &i);
+
+	fclose(fp);
+	memset(cmd, 0, 40);
+	if (i <= 1) {
+		free(cmd);
+		return NULL;
+	}
+
+	snprintf(cmd, 16, "%i", i-1);
+	return cmd;
+}
+
 ps1 * gen_from_config() {
 	char * path = malloc(64);
 	memset(path, 0, 64);
@@ -160,6 +194,10 @@ ps1 * gen_from_config() {
 
 		if (strncmp (strrd, "$svn", 5) == 0) {
 			z -> text = svn_module();
+		}
+
+		if (strncmp (strrd, "$proc", 5) == 0) {
+			z -> text = proc_module();
 		}
 
 		if (z -> text == NULL) {

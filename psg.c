@@ -33,7 +33,8 @@ void echo_ps1 (ps1 * ll) {
 			if (ll -> next != NULL && is_non_null_color(ll -> next -> colors)) {
 				printf("\e[48;5;%im", ll -> next -> colors.bg);
 			} else {
-				printf("\e[48;5;%im", TERM_BG);
+				printf("\e[0m");
+				printf("\e[38;5;%im", ll -> colors.bg);
 			}
 			printf("⮀");
 		}
@@ -120,6 +121,22 @@ char * userhost_module() {
 	return result;
 }
 
+char * ssh_module() {
+	char * result = malloc(16);
+	memset(result, 0, 16);
+	strncpy(result, "ssh", 3);
+	char * sc = getenv ("SSH_CLIENT");
+	if (sc != NULL) {
+		return result;
+	}
+	char * st = getenv ("SSH_TTY");
+	if (st != NULL) {
+		return result;
+	}
+	free(result);
+	return NULL;
+}
+
 ps1 * reverse_list (ps1 * n) {
 	ps1 * res = 0;
 	while(n) {
@@ -198,6 +215,10 @@ ps1 * gen_from_config() {
 
 		if (strncmp (strrd, "$proc", 5) == 0) {
 			z -> text = proc_module();
+		}
+
+		if (strncmp (strrd, "$ssh", 5) == 0) {
+			z -> text = ssh_module();
 		}
 
 		if (z -> text == NULL) {

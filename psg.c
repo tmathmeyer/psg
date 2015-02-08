@@ -5,6 +5,8 @@
 #include <unistd.h>
 
 #define TERM_BG 0
+#define USER 0x01
+#define HOST 0x02
 
 typedef struct {
 	unsigned char fg;
@@ -36,7 +38,7 @@ void echo_ps1 (ps1 * ll) {
 				printf("\e[0m");
 				printf("\e[38;5;%im", ll -> colors.bg);
 			}
-			printf("⮀");
+			printf("\e[1m⮀\e[21m");
 		}
 		ll = ll -> next;
 	}
@@ -110,14 +112,34 @@ char * cwd_module() {
     return NULL;
 }
 
-char * userhost_module() {
+char * userhost_module(int FLAGS) {
 	char * user = getenv("USER");
-	char * host = malloc(64);
-	gethostname(host, 64);
+    char *result = calloc(32, 1);
+    char *tmp = result;
+    short ctr = 0;
 
-	char * result = malloc(1024);
-	memset(result, 0, 1024);
-	snprintf(result, 1024, "\e[1m%s@%s", user, host);
+    if (FLAGS & USER) {
+        perror("user flag set");
+    }
+    if (FLAGS & HOST) {
+        perror("host flag set");
+    }
+
+    if (FLAGS & USER) {
+        while(*user) {
+            ctr++;
+            *(tmp++) = *(user++);
+        }
+    }
+
+    if ((FLAGS & USER) && (FLAGS & HOST)) {
+        *(tmp++) = '@';
+    }
+
+    if (FLAGS & HOST) {
+        gethostname(tmp, 31-ctr);
+    }
+
 	return result;
 }
 
@@ -201,15 +223,15 @@ ps1 * gen_from_config() {
 			z -> text = git_module();
 		}
 
-		if (strncmp (strrd, "$userhost", 9) == 0) {
-			z -> text = userhost_module();
+		if (strncmp (strrd, "$usrhost", 8) == 0) {
+			z -> text = userhost_module(USER | HOST);
 		}
 
 		if (strncmp (strrd, "$path", 5) == 0) {
 			z -> text = cwd_module();
 		}
 
-		if (strncmp (strrd, "$svn", 5) == 0) {
+		if (strncmp (strrd, "$svn", 4) == 0) {
 			z -> text = svn_module();
 		}
 
@@ -217,9 +239,18 @@ ps1 * gen_from_config() {
 			z -> text = proc_module();
 		}
 
-		if (strncmp (strrd, "$ssh", 5) == 0) {
+		if (strncmp (strrd, "$ssh", 4) == 0) {
 			z -> text = ssh_module();
 		}
+
+        if (strncmp (strrd, "$user", 5) == 0) {
+            z -> text = userhost_module(USER);
+        }
+
+        if (strncmp (strrd, "$hostname", 9) == 0) {
+            z -> text = userhost_module(HOST);
+        }
+
 
 		if (z -> text == NULL) {
 			free(z);

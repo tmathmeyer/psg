@@ -118,12 +118,6 @@ char * userhost_module(int FLAGS) {
     char *tmp = result;
     short ctr = 0;
 
-    if (FLAGS & USER) {
-        perror("user flag set");
-    }
-    if (FLAGS & HOST) {
-        perror("host flag set");
-    }
 
     if (FLAGS & USER) {
         while(*user) {

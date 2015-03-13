@@ -22,4 +22,5 @@ int main() {
 		}
 	}
 	printf("\e[0m\n");
+    return 0;
 }

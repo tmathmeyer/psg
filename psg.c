@@ -38,7 +38,7 @@ void echo_ps1 (ps1 * ll) {
 				printf("\e[0m");
 				printf("\e[38;5;%im", ll -> colors.bg);
 			}
-			printf("\e[1m⮀\e[21m");
+			printf("\e[1m\e[21m");
 		}
 		ll = ll -> next;
 	}
@@ -68,31 +68,6 @@ char * git_module() {
 	}
 	fclose(git_info);
 	return pos<14?NULL:branch;
-}
-
-char * svn_module() {
-	char * path = malloc(256);
-	memset(path, 0, 256);
-	snprintf(path, 256, "/bin/bash %s/.config/psg/svntr.sh 2>/dev/null", getenv("HOME"));
-	FILE * svn_info = popen(path, "r");
-	if (svn_info == NULL) {
-		return NULL;
-	}
-
-	char * branch = malloc(64);
-	int pos = 0; char c = 0;
-	while((c = fgetc(svn_info)) != '\n' && c != EOF && pos < 64) {
-		if (c != '\\') {
-			branch[pos++] = c;
-		} else {
-			char n = fgetc(svn_info);
-			if (n == 'e') {
-				branch[pos++] = '\e';
-			}
-		}
-	}
-	fclose(svn_info);
-	return pos<2?NULL:branch;
 }
 
 char * cwd_module() {
@@ -223,10 +198,6 @@ ps1 * gen_from_config() {
 
 		if (strncmp (strrd, "$path", 5) == 0) {
 			z -> text = cwd_module();
-		}
-
-		if (strncmp (strrd, "$svn", 4) == 0) {
-			z -> text = svn_module();
 		}
 
 		if (strncmp (strrd, "$proc", 5) == 0) {

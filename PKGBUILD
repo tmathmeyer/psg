@@ -27,7 +27,7 @@ build() {
 }
 
 package() {
-    installDir="$pkgdir/usr/local/bin"
+    installDir="$pkgdir/usr/bin"
     install -dm755 "$installDir"
     install -m755 "$srcdir/$_pkgname/psg" "$installDir/psg"
 }
